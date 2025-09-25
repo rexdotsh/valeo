@@ -63,6 +63,11 @@ export const listQueue = query({
   handler: async (ctx, args) => {
     const user = await authComponent.safeGetAuthUser(ctx);
     if (!user) throw new Error('Not authenticated');
+    const doctor = await ctx.db
+      .query('doctors')
+      .withIndex('by_userId', (q) => q.eq('userId', user._id))
+      .unique();
+    if (!doctor?.active) throw new Error('Not authorized');
     const items = await ctx.db
       .query('sessions')
       .withIndex('by_status', (q) => q.eq('status', 'waiting'))
@@ -84,6 +89,11 @@ export const claimSession = mutation({
   handler: async (ctx, args) => {
     const user = await authComponent.safeGetAuthUser(ctx);
     if (!user) throw new Error('Not authenticated');
+    const doctor = await ctx.db
+      .query('doctors')
+      .withIndex('by_userId', (q) => q.eq('userId', user._id))
+      .unique();
+    if (!doctor?.active) throw new Error('Not authorized');
     const s = await ctx.db
       .query('sessions')
       .withIndex('by_sessionId', (q) => q.eq('sessionId', args.sessionId))
@@ -284,5 +294,60 @@ export const listPastConsultations = query({
       });
     }
     return results;
+  },
+});
+
+// --- Doctors membership ---
+export const registerDoctor = mutation({
+  args: {
+    userId: v.optional(v.string()),
+    email: v.optional(v.string()),
+    name: v.optional(v.string()),
+  },
+  returns: v.boolean(),
+  handler: async (ctx, args) => {
+    const user = await authComponent.safeGetAuthUser(ctx);
+    if (!user) throw new Error('Not authenticated');
+    const targetUserId = args.userId ?? user._id;
+    const targetEmail = args.email ?? user.email ?? undefined;
+    const targetName = args.name ?? user.name ?? undefined;
+
+    const existingByUser = await ctx.db
+      .query('doctors')
+      .withIndex('by_userId', (q) => q.eq('userId', targetUserId))
+      .unique();
+    if (existingByUser) {
+      if (!existingByUser.active) {
+        await ctx.db.patch(existingByUser._id, {
+          active: true,
+          email: targetEmail,
+          name: targetName,
+        });
+      }
+      return true;
+    }
+
+    await ctx.db.insert('doctors', {
+      userId: targetUserId,
+      email: targetEmail,
+      name: targetName,
+      active: true,
+    });
+    return true;
+  },
+});
+
+export const isDoctor = query({
+  args: { userId: v.optional(v.string()) },
+  returns: v.boolean(),
+  handler: async (ctx, args) => {
+    const user = await authComponent.safeGetAuthUser(ctx);
+    if (!user) return false;
+    const targetUserId = args.userId ?? user._id;
+    const existing = await ctx.db
+      .query('doctors')
+      .withIndex('by_userId', (q) => q.eq('userId', targetUserId))
+      .unique();
+    return !!existing?.active;
   },
 });

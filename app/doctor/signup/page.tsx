@@ -13,6 +13,8 @@ import {
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { authClient } from '@/lib/auth-client';
+import { useMutation } from 'convex/react';
+import { api } from '@/convex/_generated/api';
 
 export default function DoctorSignupPage() {
   const router = useRouter();
@@ -23,6 +25,7 @@ export default function DoctorSignupPage() {
   const [authCode, setAuthCode] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const registerDoctor = useMutation(api.index.registerDoctor);
 
   useEffect(() => {
     if (!isPending && session?.user) router.replace('/doctor');
@@ -57,6 +60,9 @@ export default function DoctorSignupPage() {
         setError(error.message || 'Sign up failed');
         return;
       }
+      try {
+        await registerDoctor({});
+      } catch {}
       router.replace('/doctor');
     } catch (_) {
       setError('Sign up failed');
