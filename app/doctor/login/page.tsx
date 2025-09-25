@@ -98,13 +98,17 @@ export default function DoctorLoginPage() {
               </p>
             ) : null}
             <div className="flex flex-col gap-3">
-              <Button type="submit" className="w-full" disabled={isLoading}>
+              <Button
+                type="submit"
+                className="w-full cursor-pointer"
+                disabled={isLoading}
+              >
                 {isLoading ? 'Logging in…' : 'Login'}
               </Button>
               <Button
                 type="button"
                 variant="secondary"
-                className="w-full"
+                className="w-full cursor-pointer"
                 onClick={() => router.push('/doctor/signup')}
               >
                 Sign up
