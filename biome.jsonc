@@ -8,7 +8,8 @@
       ".next",
       ".vercel",
       "public",
-      "convex/_generated/**"
+      "convex/_generated/**",
+      "tui/**" // temp
     ]
   },
   "vcs": {
@@ -63,7 +64,10 @@
         "useJsxKeyInIterable": "off", // Rule is buggy, revisit later
         "useExhaustiveDependencies": "off", // Community feedback on this rule has been poor, we will continue with ESLint
         "noUnnecessaryContinue": "off", // Turned off due to developer preferences
-        "noUnusedVariables": "off"
+        "noUnusedVariables": {
+          "level": "warn",
+          "fix": "none"
+        }
       },
       "security": {
         "noDangerouslySetInnerHtml": "off" // Covered by Conformance

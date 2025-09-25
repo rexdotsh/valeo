@@ -40,6 +40,7 @@ export default function EmergencyPage() {
         });
         if (!cancelled) router.replace(`/session/${sessionId}/waiting`);
       } catch (e) {
+        console.error(e);
         setError('Failed to start emergency session. Please try again.');
       }
     })();

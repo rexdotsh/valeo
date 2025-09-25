@@ -76,10 +76,6 @@ export default function SessionPage() {
   );
   const sendServerMessage = useMutation(api.index.sendMessage);
   const setStatus = useMutation(api.index.setSessionStatus);
-  const sessionInfo = useQuery(
-    api.index.getSession,
-    sessionId ? { sessionId } : 'skip',
-  );
 
   const localVideoRef = useRef<HTMLVideoElement>(null);
   const remoteVideoRef = useRef<HTMLVideoElement>(null);
