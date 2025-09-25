@@ -4,7 +4,12 @@ import { useEffect } from 'react';
 import { useConvexAuth } from 'convex/react';
 import { usePathname, useRouter } from 'next/navigation';
 
-const PUBLIC_PATHS = new Set(['/login', '/doctor/signup', '/doctor/login']);
+const PUBLIC_PATHS = new Set([
+  '/login',
+  '/signup',
+  '/doctor/signup',
+  '/doctor/login',
+]);
 
 export function AuthRedirect({ children }: { children: React.ReactNode }) {
   const { isAuthenticated, isLoading } = useConvexAuth();

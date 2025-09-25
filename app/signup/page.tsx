@@ -2,7 +2,6 @@
 
 import * as React from 'react';
 import { useRouter } from 'next/navigation';
-import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 import {
   Card,
@@ -15,45 +14,74 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { authClient } from '@/lib/auth-client';
 
-export default function LoginPage() {
+export default function SignupPage() {
   return (
     <div className="min-h-screen grid place-items-center p-6">
-      <LoginForm className="w-full max-w-sm" />
+      <SignupForm className="w-full max-w-sm" />
     </div>
   );
 }
 
-export function LoginForm({
+export function SignupForm({
   className,
   ...props
 }: React.ComponentProps<'div'>) {
   const router = useRouter();
-  const [email, setEmail] = React.useState('');
-  const [password, setPassword] = React.useState('');
+  const { data: session, isPending } = authClient.useSession();
   const [submitting, setSubmitting] = React.useState(false);
+  const [error, setError] = React.useState<string | null>(null);
 
-  async function onSubmit(e: React.FormEvent) {
+  React.useEffect(() => {
+    if (!isPending && session?.user) router.replace('/');
+  }, [isPending, session, router]);
+
+  if (isPending || session?.user) return null;
+
+  async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
+    if (submitting) return;
+    const form = e.currentTarget;
+    if (!form.checkValidity()) {
+      form.reportValidity();
+      return;
+    }
     setSubmitting(true);
+    setError(null);
     try {
-      await authClient.signIn.email({ email, password });
+      const formData = new FormData(form);
+      const name = String(formData.get('name') || '').trim();
+      const email = String(formData.get('email') || '').trim();
+      const password = String(formData.get('password') || '');
+
+      const { error } = await authClient.signUp.email({
+        name,
+        email,
+        password,
+      });
+      if (error) {
+        setError(error.message || 'Sign up failed');
+        return;
+      }
       router.replace('/');
+    } catch (_) {
+      setError('Sign up failed');
     } finally {
       setSubmitting(false);
     }
   }
 
   return (
-    <div className={cn('flex flex-col gap-6', className)} {...props}>
+    <div
+      className={['flex flex-col gap-6', className].filter(Boolean).join(' ')}
+      {...props}
+    >
       <Card>
         <CardHeader className="text-center">
-          <CardTitle>Login to your account</CardTitle>
-          <CardDescription>
-            Enter your email below to login to your account
-          </CardDescription>
+          <CardTitle>Create your account</CardTitle>
+          <CardDescription>Sign up to continue</CardDescription>
         </CardHeader>
         <CardContent>
-          <form onSubmit={onSubmit}>
+          <form onSubmit={onSubmit} className="space-y-6">
             <div className="flex flex-col gap-6">
               <Button
                 variant="outline"
@@ -74,52 +102,62 @@ export function LoginForm({
                 </div>
               </div>
               <div className="grid gap-3">
-                <Label htmlFor="email">Email</Label>
+                <Label htmlFor="name">Name</Label>
                 <Input
-                  id="email"
-                  type="email"
-                  placeholder="m@example.com"
+                  id="name"
+                  name="name"
+                  type="text"
                   required
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
+                  autoComplete="name"
                 />
               </div>
               <div className="grid gap-3">
-                <div className="flex items-center">
-                  <Label htmlFor="password">Password</Label>
-                  <a
-                    href="/reset"
-                    className="ml-auto inline-block text-sm underline-offset-4 hover:underline"
-                  >
-                    Forgot your password?
-                  </a>
-                </div>
+                <Label htmlFor="email">Email</Label>
                 <Input
-                  id="password"
-                  type="password"
+                  id="email"
+                  name="email"
+                  type="email"
                   required
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
+                  autoComplete="email"
                 />
               </div>
+              <div className="grid gap-3">
+                <Label htmlFor="password">Password</Label>
+                <Input
+                  id="password"
+                  name="password"
+                  type="password"
+                  required
+                  autoComplete="new-password"
+                />
+              </div>
+              {error ? (
+                <p
+                  role="alert"
+                  aria-live="assertive"
+                  className="text-sm text-red-500"
+                >
+                  {error}
+                </p>
+              ) : null}
               <div className="flex flex-col gap-2">
                 <Button type="submit" className="w-full" disabled={submitting}>
-                  {submitting ? 'Logging in…' : 'Login'}
+                  {submitting ? 'Creating…' : 'Create account'}
                 </Button>
                 <Button
                   variant="secondary"
                   className="w-full"
                   type="button"
-                  onClick={() => router.push('/doctor/login')}
+                  onClick={() => router.push('/login')}
                 >
-                  Doctor login
+                  Go to login
                 </Button>
               </div>
             </div>
             <div className="mt-4 text-center text-sm">
-              Don&apos;t have an account?{' '}
-              <a href="/signup" className="underline underline-offset-4">
-                Sign up
+              Already have an account?{' '}
+              <a href="/login" className="underline underline-offset-4">
+                Log in
               </a>
             </div>
           </form>

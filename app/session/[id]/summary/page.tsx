@@ -67,12 +67,6 @@ export default function SummaryPage() {
               </div>
             </div>
           ) : null}
-
-          <div className="rounded-md border border-dashed p-3 text-sm text-muted-foreground">
-            AI summary will appear here after the call. This will include key
-            findings, advice, and red-flags.
-          </div>
-
           <div className="flex justify-end gap-2">
             <Button variant="secondary" onClick={() => window.print()}>
               Print
