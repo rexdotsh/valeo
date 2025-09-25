@@ -6,14 +6,18 @@ import * as React from 'react';
 import { format } from 'date-fns';
 import { Calendar } from '@/components/ui/calendar';
 import { getUpcomingPrescriptions } from '@/lib/sampledata';
-import { useQuery } from 'convex/react';
+import { useConvexAuth, useQuery } from 'convex/react';
 import { api } from '@/convex/_generated/api';
 import { orders, splitOrders } from '@/lib/orders';
 import PatientQuestionnaire from '@/components/patient/PatientQuestionnaire';
 import { authClient } from '@/lib/auth-client';
 
 function PastConsultationsTile(): React.JSX.Element {
-  const consultations = useQuery(api.index.listPastConsultations, { limit: 5 });
+  const { isAuthenticated } = useConvexAuth();
+  const consultations = useQuery(
+    api.index.listPastConsultations,
+    isAuthenticated ? { limit: 5 } : 'skip',
+  );
   return (
     <div className="h-full w-full flex flex-col">
       <div className="flex items-center justify-between px-4 py-3 border-b">
