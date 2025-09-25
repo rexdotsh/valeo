@@ -26,10 +26,12 @@ export default defineSchema({
   })
     .index('by_status', ['status'])
     .index('by_sessionId', ['sessionId']),
+  // doctor notes
   notes: defineTable({
     sessionId: v.string(),
     body: v.string(),
   }).index('by_sessionId', ['sessionId']),
+  // chat
   messages: defineTable({
     sessionId: v.string(),
     sender: v.string(),
