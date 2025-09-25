@@ -1,7 +1,7 @@
 'use client';
 
 import { useMemo } from 'react';
-import { useParams } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { useQuery } from 'convex/react';
@@ -9,6 +9,7 @@ import { api } from '@/convex/_generated/api';
 
 export default function SummaryPage() {
   const params = useParams<{ id: string }>();
+  const router = useRouter();
   const sessionId = useMemo(
     () => (Array.isArray(params?.id) ? params.id[0] : params?.id) ?? '',
     [params],
@@ -76,7 +77,7 @@ export default function SummaryPage() {
             <Button variant="secondary" onClick={() => window.print()}>
               Print
             </Button>
-            <Button onClick={() => history.back()}>Back</Button>
+            <Button onClick={() => router.push('/')}>Back</Button>
           </div>
         </CardContent>
       </Card>
