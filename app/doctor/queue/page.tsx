@@ -14,6 +14,7 @@ import {
 import { useQuery, useMutation } from 'convex/react';
 import { api } from '@/convex/_generated/api';
 import { Badge } from '@/components/ui/badge';
+import { useRouter } from 'next/navigation';
 
 type QueueItem = {
   sessionId: string;
@@ -23,10 +24,17 @@ type QueueItem = {
 };
 
 export default function DoctorQueuePage() {
+  const router = useRouter();
+  const isDoctor = useQuery(api.index.isDoctor, {});
   const [filterUrgency, setFilterUrgency] = useState<
     'all' | QueueItem['urgency']
   >('all');
   const [search, setSearch] = useState('');
+
+  if (isDoctor === false) {
+    if (typeof window !== 'undefined') router.replace('/doctor/login');
+    return null;
+  }
 
   const queue = useQuery(api.index.listQueue, {});
   const claim = useMutation(api.index.claimSession);
@@ -53,6 +61,8 @@ export default function DoctorQueuePage() {
   const sorted = [...filtered].sort((a, b) => {
     return urgencyRank[a.urgency] - urgencyRank[b.urgency];
   });
+
+  if (isDoctor === undefined) return null;
 
   return (
     <main className="mx-auto max-w-5xl px-4 py-8">

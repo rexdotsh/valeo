@@ -29,6 +29,12 @@ export const createAuth = (
       requireEmailVerification: false,
       disableSignUp: false,
     },
+    socialProviders: {
+      google: {
+        clientId: process.env.GOOGLE_CLIENT_ID as string,
+        clientSecret: process.env.GOOGLE_CLIENT_SECRET as string,
+      },
+    },
     plugins: [
       // The Convex plugin is required for Convex compatibility
       convex(),
@@ -36,11 +42,9 @@ export const createAuth = (
   });
 };
 
-// Example function for getting the current user
-// Feel free to edit, omit, etc.
 export const getCurrentUser = query({
   args: {},
   handler: async (ctx) => {
-    return authComponent.getAuthUser(ctx);
+    return authComponent.safeGetAuthUser(ctx);
   },
 });

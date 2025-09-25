@@ -6,17 +6,26 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Switch } from '@/components/ui/switch';
 import { authClient } from '@/lib/auth-client';
+import { useQuery } from 'convex/react';
+import { api } from '@/convex/_generated/api';
 
 export default function DoctorPortalPage() {
   const router = useRouter();
   const [available, setAvailable] = useState(false);
 
   const { data: session, isPending } = authClient.useSession();
+  const isDoctor = useQuery(api.index.isDoctor, {});
   useEffect(() => {
-    if (!isPending && !session?.user) router.replace('/doctor/login');
-  }, [isPending, session, router]);
+    if (!isPending) {
+      if (!session?.user) {
+        router.replace('/doctor/login');
+      } else if (isDoctor === false) {
+        router.replace('/doctor/login');
+      }
+    }
+  }, [isPending, session, isDoctor, router]);
 
-  if (isPending || !session?.user) return null;
+  if (isPending || !session?.user || isDoctor === undefined) return null;
 
   return (
     <main className="mx-auto max-w-3xl px-4 py-8">
