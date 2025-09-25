@@ -10,7 +10,7 @@ export default function HomePage() {
         <div className="mx-auto flex max-w-5xl items-center justify-between px-4 py-3">
           <Link href="/" className="inline-flex items-center gap-2">
             <Image
-              src="/spes.webp"
+              src="/valeo.webp"
               alt=""
               width={120}
               height={40}
@@ -59,7 +59,7 @@ export default function HomePage() {
             </CardHeader>
             <CardContent>
               <pre className="overflow-x-auto rounded-md bg-muted p-3 text-xs">
-                <code>ssh tui.spes.rex.wf</code>
+                <code>ssh tui.valeo.rex.wf</code>
               </pre>
             </CardContent>
           </Card>

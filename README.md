@@ -1,14 +1,14 @@
-# spes (/ˈspeːs/)
-[![Ask DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/rexdotsh/spes)
+# valeo (/ˈwa.le.oː/)
+[![Ask DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/rexdotsh/valeo)
 
-> spes is the Latin word for "hope." In Roman mythology, Spes was also the goddess of hope and expectation.
+> valeo is the Latin verb meaning "to be strong" or "to be well."
 
 ### Installation
 
 ```bash
 # Clone repository
-git clone https://github.com/rexdotsh/spes
-cd spes
+git clone https://github.com/rexdotsh/valeo
+cd valeo
 
 # Install dependencies
 bun install

@@ -13,7 +13,7 @@ type Props = {
 };
 
 export function NotesPanel({ sessionId, readOnly = false }: Props) {
-  const storageKey = `spes:session:${sessionId}:notes`;
+  const storageKey = `valeo:session:${sessionId}:notes`;
   const [notes, setNotes] = useState('');
   const [savedAt, setSavedAt] = useState<number | null>(null);
   const serverNotes = useQuery(api.index.getNotes, { sessionId });

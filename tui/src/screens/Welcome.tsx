@@ -8,7 +8,7 @@ interface Props {
 export function Welcome({ onStart, onEmergency }: Props) {
   return (
     <box flexDirection="column" padding={2} gap={1} alignItems="center">
-      <ascii-font font="tiny" text="SPES" />
+      <ascii-font font="tiny" text="VALEO" />
       <text attributes={TextAttributes.BOLD}>Telemedicine, simplified</text>
       <text>Start a consultation or get instant AI guidance.</text>
       <box border padding={1} width={50}>

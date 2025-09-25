@@ -15,12 +15,12 @@ export default function SummaryPage() {
   // Placeholder: derive a basic summary from triage + chat-only (to be replaced with AI)
   const triageRaw =
     typeof window !== 'undefined'
-      ? localStorage.getItem(`spes:session:${sessionId}:triage`)
+      ? localStorage.getItem(`valeo:session:${sessionId}:triage`)
       : null;
   const triage = triageRaw ? JSON.parse(triageRaw) : null;
   const notesRaw =
     typeof window !== 'undefined'
-      ? localStorage.getItem(`spes:session:${sessionId}:notes`)
+      ? localStorage.getItem(`valeo:session:${sessionId}:notes`)
       : null;
 
   return (

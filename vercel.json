@@ -2,7 +2,7 @@
   "rewrites": [
     {
       "source": "/monitor/:match*",
-      "destination": "https://spes.rex.wf/_vercel/:match*"
+      "destination": "https://valeo.rex.wf/_vercel/:match*"
     }
   ]
 }

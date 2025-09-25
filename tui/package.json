@@ -1,5 +1,5 @@
 {
-  "name": "spes-tui",
+  "name": "valeo-tui",
   "module": "src/index.tsx",
   "type": "module",
   "private": true,

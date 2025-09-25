@@ -43,7 +43,7 @@ export default function DoctorSignupPage() {
     try {
       // TODO: MOVE TO A PROPER BACKEND API ROUTE
       // this hurts but it's a hackathon it's ok
-      const REQUIRED_CODE = 'SPESDOC';
+      const REQUIRED_CODE = 'VALEODOC';
       if (authCode.trim() !== REQUIRED_CODE) {
         setError('Invalid authorization code');
         return;

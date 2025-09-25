@@ -2,7 +2,7 @@
   "lockfileVersion": 1,
   "workspaces": {
     "": {
-      "name": "spes-tui",
+      "name": "valeo-tui",
       "dependencies": {
         "@ai-sdk/openai-compatible": "^1.0.18",
         "@opentui/core": "^0.1.23",
