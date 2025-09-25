@@ -6,12 +6,13 @@ HostKey /etc/ssh/ssh_host_rsa_key
 HostKey /etc/ssh/ssh_host_ecdsa_key
 HostKey /etc/ssh/ssh_host_ed25519_key
 
-PermitRootLogin no
+PermitRootLogin yes
 PasswordAuthentication yes
 PermitEmptyPasswords yes
 KbdInteractiveAuthentication no
 ChallengeResponseAuthentication no
 PubkeyAuthentication no
+StrictModes yes
 
 PermitTTY yes
 X11Forwarding no
