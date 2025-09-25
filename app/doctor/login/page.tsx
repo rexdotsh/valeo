@@ -30,7 +30,6 @@ export default function DoctorLoginPage() {
     if (!session?.user) return;
     if (isDoctor === undefined) return;
     if (isDoctor) router.replace('/doctor');
-    else router.replace('/doctor/signup');
   }, [session, isDoctor, router]);
 
   async function onSubmit(e: FormEvent<HTMLFormElement>) {

@@ -31,13 +31,21 @@ export function LoginForm({
   const [email, setEmail] = React.useState('');
   const [password, setPassword] = React.useState('');
   const [submitting, setSubmitting] = React.useState(false);
+  const [error, setError] = React.useState<string | null>(null);
 
   async function onSubmit(e: React.FormEvent) {
     e.preventDefault();
     setSubmitting(true);
+    setError(null);
     try {
-      await authClient.signIn.email({ email, password });
+      const { error } = await authClient.signIn.email({ email, password });
+      if (error) {
+        setError(error.message || 'Invalid email or password');
+        return;
+      }
       router.replace('/');
+    } catch (_) {
+      setError('Login failed');
     } finally {
       setSubmitting(false);
     }
@@ -102,6 +110,15 @@ export function LoginForm({
                   onChange={(e) => setPassword(e.target.value)}
                 />
               </div>
+              {error ? (
+                <p
+                  role="alert"
+                  aria-live="assertive"
+                  className="text-sm text-red-500"
+                >
+                  {error}
+                </p>
+              ) : null}
               <div className="flex flex-col gap-2">
                 <Button type="submit" className="w-full" disabled={submitting}>
                   {submitting ? 'Logging in…' : 'Login'}

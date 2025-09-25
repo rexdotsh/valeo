@@ -65,8 +65,16 @@ export default function DoctorSignupPage() {
         }
       }
       try {
-        await registerDoctor({});
-      } catch {}
+        const ok = await registerDoctor({});
+        if (!ok) {
+          setError('Doctor registration failed');
+          return;
+        }
+      } catch (e) {
+        console.error(e);
+        setError('Doctor registration failed');
+        return;
+      }
       router.replace('/doctor');
     } catch (_) {
       setError('Sign up failed');
