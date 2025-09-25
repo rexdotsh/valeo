@@ -30,6 +30,8 @@ export default function DoctorLoginPage() {
     if (!session?.user) return;
     if (isDoctor === undefined) return;
     if (isDoctor) router.replace('/doctor');
+    else
+      setError('This account is not registered as a doctor. Please sign up.');
   }, [session, isDoctor, router]);
 
   async function onSubmit(e: FormEvent<HTMLFormElement>) {
