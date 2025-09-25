@@ -13,16 +13,10 @@ type Props = {
 };
 
 export function NotesPanel({ sessionId, readOnly = false }: Props) {
-  const storageKey = `valeo:session:${sessionId}:notes`;
   const [notes, setNotes] = useState('');
   const [savedAt, setSavedAt] = useState<number | null>(null);
   const serverNotes = useQuery(api.index.getNotes, { sessionId });
   const saveNotes = useMutation(api.index.upsertNotes);
-
-  useEffect(() => {
-    const existing = localStorage.getItem(storageKey);
-    if (existing) setNotes(existing);
-  }, [storageKey]);
 
   useEffect(() => {
     if (serverNotes?.body && !notes) {
@@ -32,7 +26,6 @@ export function NotesPanel({ sessionId, readOnly = false }: Props) {
 
   async function save() {
     if (readOnly) return;
-    localStorage.setItem(storageKey, notes);
     await saveNotes({ sessionId, body: notes });
     setSavedAt(Date.now());
   }

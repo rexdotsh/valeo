@@ -4,6 +4,8 @@ import { useMemo } from 'react';
 import { useParams } from 'next/navigation';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
+import { useQuery } from 'convex/react';
+import { api } from '@/convex/_generated/api';
 
 export default function SummaryPage() {
   const params = useParams<{ id: string }>();
@@ -12,16 +14,14 @@ export default function SummaryPage() {
     [params],
   );
 
-  // Placeholder: derive a basic summary from triage + chat-only (to be replaced with AI)
-  const triageRaw =
-    typeof window !== 'undefined'
-      ? localStorage.getItem(`valeo:session:${sessionId}:triage`)
-      : null;
-  const triage = triageRaw ? JSON.parse(triageRaw) : null;
-  const notesRaw =
-    typeof window !== 'undefined'
-      ? localStorage.getItem(`valeo:session:${sessionId}:notes`)
-      : null;
+  const session = useQuery(
+    api.index.getSession,
+    sessionId ? { sessionId } : 'skip',
+  );
+  const notes = useQuery(
+    api.index.getNotes,
+    sessionId ? { sessionId } : 'skip',
+  );
 
   return (
     <main className="mx-auto max-w-3xl px-4 py-8">
@@ -33,20 +33,23 @@ export default function SummaryPage() {
           <div className="text-sm text-muted-foreground">
             Session: {sessionId}
           </div>
-          {triage ? (
+          {session?.triage ? (
             <div className="space-y-1 text-sm">
               <div>
-                <span className="font-medium">Category:</span> {triage.category}
+                <span className="font-medium">Category:</span>{' '}
+                {session.triage.category}
               </div>
               <div>
-                <span className="font-medium">Urgency:</span> {triage.urgency}
+                <span className="font-medium">Urgency:</span>{' '}
+                {session.triage.urgency}
               </div>
               <div>
-                <span className="font-medium">Language:</span> {triage.language}
+                <span className="font-medium">Language:</span>{' '}
+                {session.triage.language}
               </div>
               <div>
                 <span className="font-medium">Complaint:</span>{' '}
-                {triage.symptoms}
+                {session.triage.symptoms}
               </div>
             </div>
           ) : (
@@ -55,11 +58,11 @@ export default function SummaryPage() {
             </div>
           )}
 
-          {notesRaw ? (
+          {notes?.body ? (
             <div className="space-y-1 text-sm">
               <div className="font-medium">Doctor notes</div>
               <div className="whitespace-pre-wrap text-muted-foreground">
-                {notesRaw}
+                {notes.body}
               </div>
             </div>
           ) : null}

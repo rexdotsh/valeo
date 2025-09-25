@@ -23,7 +23,6 @@ type QueueItem = {
 };
 
 export default function DoctorQueuePage() {
-  // Placeholder client-side queue using sessionStorage for demo
   const [filterUrgency, setFilterUrgency] = useState<
     'all' | QueueItem['urgency']
   >('all');
