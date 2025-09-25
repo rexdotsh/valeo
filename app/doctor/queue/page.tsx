@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -31,12 +31,13 @@ export default function DoctorQueuePage() {
   >('all');
   const [search, setSearch] = useState('');
 
-  if (isDoctor === false) {
-    if (typeof window !== 'undefined') router.replace('/doctor/login');
-    return null;
-  }
+  useEffect(() => {
+    if (isDoctor === false) {
+      router.replace('/doctor/login');
+    }
+  }, [isDoctor, router]);
 
-  const queue = useQuery(api.index.listQueue, {});
+  const queue = useQuery(api.index.listQueue, isDoctor ? {} : 'skip');
   const claim = useMutation(api.index.claimSession);
 
   const items: Array<QueueItem> = (queue ?? []).map((s) => ({

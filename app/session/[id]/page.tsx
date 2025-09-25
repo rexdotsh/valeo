@@ -51,16 +51,18 @@ export default function SessionPage() {
   );
 
   const { data: authSession, isPending: authPending } = authClient.useSession();
+  const isDoctor = useQuery(api.index.isDoctor, {});
   const referrerRole = useMemo<Role>(() => {
     const ref = typeof document !== 'undefined' ? document.referrer || '' : '';
     return ref.includes('/doctor') ? 'doctor' : 'patient';
   }, []);
-  const role = useMemo<Role>(
-    () =>
-      authPending ? referrerRole : authSession?.user ? 'doctor' : 'patient',
-    [authPending, authSession, referrerRole],
-  );
-  const roleReady = !authPending;
+  const roleReady =
+    !authPending && (!authSession?.user || isDoctor !== undefined);
+  const role = useMemo<Role>(() => {
+    if (!roleReady) return referrerRole;
+    if (authSession?.user) return isDoctor ? 'doctor' : 'patient';
+    return 'patient';
+  }, [roleReady, authSession, isDoctor, referrerRole]);
 
   const [ready, setReady] = useState(false);
   const [isConnected, setIsConnected] = useState(false);

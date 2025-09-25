@@ -13,7 +13,7 @@ import {
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { authClient } from '@/lib/auth-client';
-import { useMutation } from 'convex/react';
+import { useMutation, useQuery } from 'convex/react';
 import { api } from '@/convex/_generated/api';
 
 export default function DoctorSignupPage() {
@@ -27,11 +27,13 @@ export default function DoctorSignupPage() {
   const [error, setError] = useState<string | null>(null);
   const registerDoctor = useMutation(api.index.registerDoctor);
 
+  const isDoctor = useQuery(api.index.isDoctor, {});
   useEffect(() => {
-    if (!isPending && session?.user) router.replace('/doctor');
-  }, [isPending, session, router]);
+    if (!isPending && session?.user && isDoctor === true)
+      router.replace('/doctor');
+  }, [isPending, session, isDoctor, router]);
 
-  if (isPending || session?.user) return null;
+  if (isPending) return null;
 
   async function onSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -51,14 +53,16 @@ export default function DoctorSignupPage() {
         setError('Invalid authorization code');
         return;
       }
-      const { error } = await authClient.signUp.email({
-        name: name.trim(),
-        email: email.trim(),
-        password,
-      });
-      if (error) {
-        setError(error.message || 'Sign up failed');
-        return;
+      if (!session?.user) {
+        const { error } = await authClient.signUp.email({
+          name: name.trim(),
+          email: email.trim(),
+          password,
+        });
+        if (error) {
+          setError(error.message || 'Sign up failed');
+          return;
+        }
       }
       try {
         await registerDoctor({});

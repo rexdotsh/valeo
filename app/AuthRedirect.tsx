@@ -18,10 +18,28 @@ export function AuthRedirect({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     if (isLoading) return;
-    if (!isAuthenticated) {
-      if (!PUBLIC_PATHS.has(pathname || '')) {
-        router.replace('/login');
+
+    const path = pathname || '';
+    const isDoctorProtected =
+      path.startsWith('/doctor') && !PUBLIC_PATHS.has(path);
+
+    if (isAuthenticated) {
+      // Redirect authenticated users away from generic auth pages
+      if (path === '/login' || path === '/signup') {
+        router.replace('/');
       }
+      return;
+    }
+
+    // Unauthenticated: protect doctor routes specifically
+    if (isDoctorProtected) {
+      router.replace('/doctor/login');
+      return;
+    }
+
+    // Fallback: keep existing protection for non-public pages
+    if (!PUBLIC_PATHS.has(path)) {
+      router.replace('/login');
     }
   }, [isAuthenticated, isLoading, pathname, router]);
 

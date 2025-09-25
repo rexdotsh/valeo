@@ -16,12 +16,13 @@ export default function DoctorPortalPage() {
   const { data: session, isPending } = authClient.useSession();
   const isDoctor = useQuery(api.index.isDoctor, {});
   useEffect(() => {
-    if (!isPending) {
-      if (!session?.user) {
-        router.replace('/doctor/login');
-      } else if (isDoctor === false) {
-        router.replace('/doctor/login');
-      }
+    if (isPending) return;
+    if (!session?.user) {
+      router.replace('/doctor/login');
+      return;
+    }
+    if (isDoctor === false) {
+      router.replace('/doctor/signup');
     }
   }, [isPending, session, isDoctor, router]);
 

@@ -13,6 +13,8 @@ import {
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { authClient } from '@/lib/auth-client';
+import { useQuery } from 'convex/react';
+import { api } from '@/convex/_generated/api';
 
 export default function DoctorLoginPage() {
   const router = useRouter();
@@ -21,11 +23,15 @@ export default function DoctorLoginPage() {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  // If already authed, redirect to doctor portal
+  // If already authed, route based on doctor membership
   const { data: session } = authClient.useSession();
+  const isDoctor = useQuery(api.index.isDoctor, {});
   useEffect(() => {
-    if (session?.user) router.replace('/doctor');
-  }, [session, router]);
+    if (!session?.user) return;
+    if (isDoctor === undefined) return;
+    if (isDoctor) router.replace('/doctor');
+    else router.replace('/doctor/signup');
+  }, [session, isDoctor, router]);
 
   async function onSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -46,7 +52,7 @@ export default function DoctorLoginPage() {
         setError(error.message || 'Login failed');
         return;
       }
-      router.replace('/doctor');
+      // Redirect will be handled by effect above after session refresh
     } catch (_) {
       setError('Login failed');
     } finally {
