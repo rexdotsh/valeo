@@ -1,83 +1,37 @@
 import Link from 'next/link';
 import Image from 'next/image';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 
 export default function HomePage() {
   return (
-    <main className="min-h-dvh bg-background text-foreground">
-      <header className="sticky top-0 z-10 border-b border-border bg-background/80 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-        <div className="mx-auto flex max-w-5xl items-center justify-between px-4 py-3">
-          <Link href="/" className="inline-flex items-center gap-2">
-            <Image
-              src="/valeo.svg"
-              alt=""
-              width={120}
-              height={40}
-              className="h-10 w-auto"
-            />
-          </Link>
-          <Button asChild variant="secondary">
-            <Link href="/doctor">Doctor portal</Link>
-          </Button>
-        </div>
+    <div className="flex flex-col min-h-screen">
+      <header className="flex items-center justify-between p-6">
+        <Link href="/" className="flex items-center">
+          <Image
+            src="/valeo.svg"
+            alt="Valeo"
+            width={150}
+            height={150}
+            className="h-11 w-auto"
+          />
+        </Link>
+        <Link
+          href="/doctor"
+          className="px-4 py-2 bg-secondary text-secondary-foreground hover:bg-secondary/80 rounded-md font-medium transition-colors"
+        >
+          Doctor portal
+        </Link>
       </header>
 
-      <section className="mx-auto max-w-4xl px-4 py-16">
-        <div className="text-center mb-16">
-          <h1 className="text-5xl md:text-6xl font-bold mb-6 tracking-tight">
-            Healthcare that <br />
-            <span className="bg-gradient-to-r from-primary via-accent-foreground to-destructive bg-clip-text text-transparent">
-              works everywhere
-            </span>
-          </h1>
-          <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-            Reliable consultations for high-latency, low-bandwidth connections.
-          </p>
-        </div>
-
-        <div className="space-y-6">
-          <Card className="border-border bg-card text-card-foreground">
-            <CardHeader>
-              <CardTitle className="text-2xl">See a doctor now</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <p className="mb-6 text-muted-foreground">
-                Get started with a consultation right away.
-              </p>
-              <Button asChild size="lg" className="h-16 w-full text-base">
-                <Link href="/patient">I am a patient</Link>
-              </Button>
-            </CardContent>
-          </Card>
-
-          <Card className="border-border bg-card text-card-foreground">
-            <CardHeader>
-              <CardTitle className="text-lg">
-                Or connect via SSH on low-bandwidth connections
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <pre className="overflow-x-auto rounded-md bg-muted p-3 text-xs">
-                <code>ssh tui.valeo.rex.wf</code>
-              </pre>
-            </CardContent>
-          </Card>
-
-          <div className="flex justify-center pt-8">
-            <Button
-              asChild
-              variant="destructive"
-              size="lg"
-              className="px-20 py-9 text-xl font-semibold rounded-full"
-              aria-label="Emergency consult"
-              title="Emergency consult - Skip onboarding, direct doctor connection"
-            >
-              <Link href="/emergency">Emergency</Link>
-            </Button>
+      <div className="flex flex-1 flex-col justify-end p-4 pb-4">
+        <div className="flex flex-col gap-4">
+          <div className="grid gap-4 md:grid-cols-3">
+            <div className="bg-muted/50 h-96 rounded-xl md:col-span-1" />
+            <div className="bg-muted/50 h-96 rounded-xl md:col-span-2" />
+            <div className="bg-muted/50 h-72 rounded-xl md:col-span-2" />
+            <div className="bg-muted/50 h-72 rounded-xl md:col-span-1" />
           </div>
         </div>
-      </section>
-    </main>
+      </div>
+    </div>
   );
 }
