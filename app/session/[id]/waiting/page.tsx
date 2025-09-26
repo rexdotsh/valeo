@@ -31,7 +31,7 @@ export default function WaitingRoomPage() {
     }
   }, [session, sessionId, router]);
 
-  const sshCommand = `ssh tui.valeo.rex.wf -t ${sessionId}`;
+  const sshCommand = `ssh tui@173.234.14.145 -p 2222 -t ${sessionId}`;
 
   return (
     <main className="mx-auto max-w-3xl px-4 py-8">

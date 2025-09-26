@@ -16,7 +16,7 @@ type Props = {
 };
 
 export function TuiFallbackDialog({ open, onOpenChange, sessionId }: Props) {
-  const sshCommand = `ssh tui.valeo.rex.wf -t ${sessionId}`;
+  const sshCommand = `ssh tui@173.234.14.145 -p 2222 -t ${sessionId}`;
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>

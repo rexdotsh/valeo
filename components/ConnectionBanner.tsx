@@ -60,7 +60,7 @@ export function ConnectionBanner({
 
   if (!show) return null;
 
-  const sshCommand = `ssh tui.valeo.rex.wf -t ${sessionId}`;
+  const sshCommand = `ssh tui@173.234.14.145 -p 2222 -t ${sessionId}`;
 
   return (
     <div className="fixed inset-x-0 bottom-0 z-20 border-t border-border bg-background/90 p-3 backdrop-blur">
