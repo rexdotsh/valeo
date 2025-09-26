@@ -94,11 +94,11 @@ function ChatPageContent({ onNewChat }: { onNewChat: () => void }) {
     'Could my current medications interact with each other?',
   ];
 
-  const handleBackToWaitingRoom = () => {
-    if (sessionId) {
-      router.push(`/session/${sessionId}/waiting`);
+  const handleBack = () => {
+    const sessionFromParams = searchParams.get('sessionId');
+    if (sessionFromParams || sessionId) {
+      router.push(`/session/${sessionFromParams || sessionId}/waiting`);
     } else {
-      // Fallback: go back in history
       router.back();
     }
   };
@@ -112,11 +112,13 @@ function ChatPageContent({ onNewChat }: { onNewChat: () => void }) {
             <Button
               variant="ghost"
               size="sm"
-              onClick={handleBackToWaitingRoom}
+              onClick={handleBack}
               className="flex items-center gap-2"
             >
               <ArrowLeft className="w-4 h-4" />
-              Back to Waiting Room
+              {searchParams.get('sessionId') || sessionId
+                ? 'Back to Waiting Room'
+                : 'Back'}
             </Button>
           </div>
           <div>

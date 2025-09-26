@@ -11,6 +11,7 @@ import { api } from '@/convex/_generated/api';
 import { orders, splitOrders } from '@/lib/orders';
 import PatientQuestionnaire from '@/components/patient/PatientQuestionnaire';
 import { authClient } from '@/lib/auth-client';
+import { Sparkles } from 'lucide-react';
 
 function PastConsultationsTile(): React.JSX.Element {
   const { isAuthenticated } = useConvexAuth();
@@ -313,6 +314,13 @@ export default function HomePage() {
           />
         </Link>
         <div className="flex items-center gap-2">
+          <Link
+            href="/chat"
+            className="p-2 hover:bg-secondary/80 rounded-md transition-colors"
+            title="Chat"
+          >
+            <Sparkles className="h-5 w-5" />
+          </Link>
           <Link
             href="/doctor"
             className="px-4 py-2 bg-secondary text-secondary-foreground hover:bg-secondary/80 rounded-md font-medium transition-colors"
