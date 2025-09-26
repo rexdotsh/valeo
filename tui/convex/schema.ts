@@ -26,10 +26,12 @@ export default defineSchema({
   })
     .index('by_status', ['status'])
     .index('by_sessionId', ['sessionId']),
+  // doctor notes
   notes: defineTable({
     sessionId: v.string(),
     body: v.string(),
   }).index('by_sessionId', ['sessionId']),
+  // chat
   messages: defineTable({
     sessionId: v.string(),
     sender: v.string(),
@@ -42,11 +44,13 @@ export default defineSchema({
     contact: v.optional(v.string()),
   }).index('by_role', ['role']),
   doctors: defineTable({
-    code: v.string(),
-    name: v.string(),
-    languages: v.array(v.string()),
+    userId: v.string(),
+    email: v.optional(v.string()),
+    name: v.optional(v.string()),
     active: v.boolean(),
-  }).index('by_active', ['active']),
+  })
+    .index('by_userId', ['userId'])
+    .index('by_email', ['email']),
   summaries: defineTable({
     sessionId: v.string(),
     text: v.string(),

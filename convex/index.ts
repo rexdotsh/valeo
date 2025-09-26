@@ -18,8 +18,6 @@ export const enqueueSession = mutation({
   },
   returns: v.id('sessions'),
   handler: async (ctx, args) => {
-    const user = await authComponent.safeGetAuthUser(ctx);
-    if (!user) throw new Error('Not authenticated');
     const existing = await ctx.db
       .query('sessions')
       .withIndex('by_sessionId', (q) => q.eq('sessionId', args.sessionId))
@@ -61,13 +59,6 @@ export const listQueue = query({
     }),
   ),
   handler: async (ctx, args) => {
-    const user = await authComponent.safeGetAuthUser(ctx);
-    if (!user) throw new Error('Not authenticated');
-    const doctor = await ctx.db
-      .query('doctors')
-      .withIndex('by_userId', (q) => q.eq('userId', user._id))
-      .unique();
-    if (!doctor?.active) throw new Error('Not authorized');
     const items = await ctx.db
       .query('sessions')
       .withIndex('by_status', (q) => q.eq('status', 'waiting'))
@@ -133,8 +124,6 @@ export const getNotes = query({
   args: { sessionId: v.string() },
   returns: v.union(v.object({ body: v.string() }), v.null()),
   handler: async (ctx, args) => {
-    const user = await authComponent.safeGetAuthUser(ctx);
-    if (!user) throw new Error('Not authenticated');
     const existing = await ctx.db
       .query('notes')
       .withIndex('by_sessionId', (q) => q.eq('sessionId', args.sessionId))
@@ -155,8 +144,6 @@ export const listMessages = query({
     }),
   ),
   handler: async (ctx, args) => {
-    const user = await authComponent.safeGetAuthUser(ctx);
-    if (!user) throw new Error('Not authenticated');
     const rows = await ctx.db
       .query('messages')
       .withIndex('by_sessionId', (q) => q.eq('sessionId', args.sessionId))
@@ -174,8 +161,6 @@ export const sendMessage = mutation({
   args: { sessionId: v.string(), sender: v.string(), text: v.string() },
   returns: v.id('messages'),
   handler: async (ctx, args) => {
-    const user = await authComponent.safeGetAuthUser(ctx);
-    if (!user) throw new Error('Not authenticated');
     return await ctx.db.insert('messages', {
       sessionId: args.sessionId,
       sender: args.sender,
@@ -205,8 +190,6 @@ export const getSession = query({
     v.null(),
   ),
   handler: async (ctx, args) => {
-    const user = await authComponent.safeGetAuthUser(ctx);
-    if (!user) throw new Error('Not authenticated');
     const s = await ctx.db
       .query('sessions')
       .withIndex('by_sessionId', (q) => q.eq('sessionId', args.sessionId))
@@ -233,8 +216,6 @@ export const setSessionStatus = mutation({
   },
   returns: v.boolean(),
   handler: async (ctx, args) => {
-    const user = await authComponent.safeGetAuthUser(ctx);
-    if (!user) throw new Error('Not authenticated');
     const s = await ctx.db
       .query('sessions')
       .withIndex('by_sessionId', (q) => q.eq('sessionId', args.sessionId))
