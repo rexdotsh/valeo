@@ -11,7 +11,7 @@ import { api } from '@/convex/_generated/api';
 import { orders, splitOrders } from '@/lib/orders';
 import PatientQuestionnaire from '@/components/patient/PatientQuestionnaire';
 import { authClient } from '@/lib/auth-client';
-import { Sparkles } from 'lucide-react';
+import { Sparkles, Stethoscope } from 'lucide-react';
 
 function PastConsultationsTile(): React.JSX.Element {
   const { isAuthenticated } = useConvexAuth();
@@ -91,14 +91,55 @@ function StartConsultationTile(): React.JSX.Element {
           <PatientQuestionnaire />
         </div>
       ) : (
-        <div className="flex-1 grid place-items-center">
-          <button
-            type="button"
-            onClick={() => setOpen(true)}
-            className="px-5 py-3 rounded-md bg-primary text-primary-foreground text-sm font-medium shadow-sm hover:opacity-90"
-          >
-            Start consultation
-          </button>
+        <div className="flex-1 flex items-center p-6 gap-6">
+          <div className="flex-1 flex items-center gap-4">
+            <div className="relative flex-shrink-0">
+              <div className="absolute inset-0 bg-gradient-to-br from-primary/20 to-secondary/20 rounded-full blur-xl animate-pulse" />
+              <div className="relative h-16 w-16 rounded-full bg-gradient-to-br from-primary to-primary/80 flex items-center justify-center shadow-lg">
+                <Sparkles className="h-8 w-8 text-primary-foreground" />
+              </div>
+            </div>
+            <div className="flex-1 min-w-0">
+              <h3 className="text-2xl font-bold bg-gradient-to-r from-foreground to-muted-foreground bg-clip-text text-transparent mb-2">
+                Talk to a Provider
+              </h3>
+              <p className="text-sm text-muted-foreground">
+                Get personalized medical advice from licensed healthcare
+                professionals in minutes
+              </p>
+              <div className="mt-3 flex items-center gap-2 text-xs text-muted-foreground">
+                <span className="inline-flex items-center gap-1">
+                  <div className="h-1.5 w-1.5 rounded-full bg-green-500" />
+                  Available 24/7
+                </span>
+              </div>
+            </div>
+          </div>
+
+          <div className="h-32 w-px bg-border/50" />
+
+          <div className="flex-[1.5] flex items-center justify-center">
+            <button
+              type="button"
+              onClick={() => setOpen(true)}
+              className="group relative px-16 py-8 rounded-xl bg-background border-2 border-primary/20 hover:border-primary/40 transition-all duration-300 w-full"
+            >
+              <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-secondary/10 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity" />
+              <div className="relative flex flex-col items-center gap-3">
+                <div className="h-12 w-12 rounded-full bg-primary/10 group-hover:bg-primary group-hover:scale-110 transition-all duration-300 flex items-center justify-center">
+                  <Stethoscope className="h-6 w-6 text-primary group-hover:text-primary-foreground transition-colors" />
+                </div>
+                <div className="text-center">
+                  <div className="text-lg font-semibold text-foreground mb-1">
+                    Begin now
+                  </div>
+                  <div className="text-xs text-muted-foreground group-hover:text-foreground transition-colors">
+                    Click to start →
+                  </div>
+                </div>
+              </div>
+            </button>
+          </div>
         </div>
       )}
     </div>
